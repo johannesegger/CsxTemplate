@@ -11,37 +11,63 @@ Template-engine that uses C# scripts to generate .cs files.
 ## Example
 ### Template
 ```
-#r "System.Core" 
- 
-using System; 
-using System.Collections.Generic; 
-using System.Linq; 
- 
-$@"namespace {Namespace} {{ 
-    //It is {DateTime.Now}. 
-    //Sum of 1 to 10 is {Enumerable.Range(1, 10).Sum()}. 
-    //{string.Join($"{Environment.NewLine} //", Enumerable 
-        .Range(0, 10) 
-        .Select(i => new { Name = $"Person {i}", Age = i + 20 }) 
-        .Select(p => $"{p.Name} is {p.Age} years old")) 
-    } 
+#r "System.Core"
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+var powers = Enumerable.Range(0, 5);
+
+$@"// Generation time: {DateTime.Now}
+
+namespace {Namespace}
+{{
+    public static class QuickMath
+    {{
+        {
+            string.Join
+            (
+                Environment.NewLine,
+                powers.Select(i =>
+                    $@"public static double TwoToThePowerOf{i}() {{
+                        return {Math.Pow(2, i)};
+                    }}"
+                )
+            )
+        }
+    }}
 }}"
 ```
-### Result
+### Result (formatted - to not hurt your eyes)
 ```
-namespace MyProject {
-    //It is 4/18/2016 12:11:55 PM.
-    //Sum of 1 to 10 is 55.
-    //Person 0 is 20 years old
- //Person 1 is 21 years old
- //Person 2 is 22 years old
- //Person 3 is 23 years old
- //Person 4 is 24 years old
- //Person 5 is 25 years old
- //Person 6 is 26 years old
- //Person 7 is 27 years old
- //Person 8 is 28 years old
- //Person 9 is 29 years old
+// Generation time: 4/18/2016 9:38:09 PM
+
+namespace CsxTemplateTest
+{
+    public static class QuickMath
+    {
+        public static double TwoToThePowerOf0()
+        {
+            return 1;
+        }
+        public static double TwoToThePowerOf1()
+        {
+            return 2;
+        }
+        public static double TwoToThePowerOf2()
+        {
+            return 4;
+        }
+        public static double TwoToThePowerOf3()
+        {
+            return 8;
+        }
+        public static double TwoToThePowerOf4()
+        {
+            return 16;
+        }
+    }
 }
 ```
 ## 
