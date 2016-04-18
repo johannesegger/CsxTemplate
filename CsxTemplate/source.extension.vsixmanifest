@@ -4,6 +4,7 @@
     <Identity Id="CsxTemplate.b72cbc8e-c7af-4966-95e6-13d4becb89dd" Version="0.0.1" Language="en-US" Publisher="Johannes Egger" />
     <DisplayName>CsxTemplate</DisplayName>
     <Description xml:space="preserve">Template-engine that uses C# scripts to generate .cs files.</Description>
+    <Tags>template, csx, roslyn, script</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
