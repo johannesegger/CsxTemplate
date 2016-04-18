@@ -29,7 +29,7 @@ $@"namespace {Namespace} {{
 ```
 ### Result
 ```
-namespace FixNuGetHintPathTestProject {
+namespace MyProject {
     //It is 4/18/2016 12:11:55 PM.
     //Sum of 1 to 10 is 55.
     //Person 0 is 20 years old
