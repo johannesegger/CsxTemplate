@@ -43,7 +43,7 @@ namespace {Namespace}
 ```
 // Generation time: 4/18/2016 9:38:09 PM
 
-namespace CsxTemplateTest
+namespace MathLib
 {
     public static class QuickMath
     {
