@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -30,7 +31,16 @@ namespace CsxTemplate
             if (bstrInputFileContents == null)
                 throw new ArgumentException(nameof(bstrInputFileContents));
 
-            var content = GetOutput(wszInputFilePath, bstrInputFileContents, wszDefaultNamespace, pGenerateProgress).Result;
+            string content;
+            try
+            {
+                content = GetOutput(wszInputFilePath, bstrInputFileContents, wszDefaultNamespace, pGenerateProgress).Result;
+            }
+            catch (Exception e)
+            {
+                content = Regex.Replace(e.ToString(), "^", "// ", RegexOptions.Multiline);
+                pGenerateProgress.YieldError(e.ToString(), 0, 0);
+            }
 
             var bytes = Encoding.UTF8.GetBytes(content);
 
@@ -43,28 +53,20 @@ namespace CsxTemplate
 
         private static async Task<string> GetOutput(string inputFilePath, string inputFileContent, string defaultNamespace, IVsGeneratorProgress progress)
         {
-            var scriptOptions = ScriptOptions.Default.WithFilePath(inputFilePath);
-            // TODO globals don't work in our case. See https://github.com/dotnet/roslyn/issues/6101
-            var script = CSharpScript.Create<string>($@"var Namespace = ""{defaultNamespace}"";")
-                .ContinueWith(inputFileContent, scriptOptions);
-            var diagnostics = script.Compile();
-            progress.YieldDiagnostics(diagnostics);
-            if (!diagnostics.IsEmpty)
+            try
             {
-                return string.Join(Environment.NewLine, diagnostics.Select(d => $"// {d}"));
+                var scriptOptions = ScriptOptions.Default.WithFilePath(inputFilePath);
+                // TODO globals don't work in our case. See https://github.com/dotnet/roslyn/issues/6101
+                var script = CSharpScript.Create<string>($@"var Namespace = ""{defaultNamespace}"";")
+                    .ContinueWith(inputFileContent, scriptOptions);
+                var state = await script.RunAsync();
+                return state.ReturnValue.ToString();
             }
-            var state = await script.RunAsync();
-            return state.ReturnValue.ToString();
-        }
-    }
-
-    public class ScriptGlobals
-    {
-        public string Namespace { get; }
-
-        public ScriptGlobals(string ns)
-        {
-            Namespace = ns;
+            catch (CompilationErrorException e)
+            {
+                progress.YieldDiagnostics(e.Diagnostics);
+                return string.Join(Environment.NewLine, e.Diagnostics.Select(d => $"// {d}"));
+            }
         }
     }
 }
