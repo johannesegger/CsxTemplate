@@ -39,7 +39,7 @@ namespace {Namespace}
 ```
 // Generation time: 4/19/2016 6:44:36 AM
 
-namespace FixNuGetHintPathTestProject
+namespace MathLib
 {
     public static class QuickMath
     {
