@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="CsxTemplate.b72cbc8e-c7af-4966-95e6-13d4becb89dd" Version="0.0.1" Language="en-US" Publisher="Johannes Egger" />
+    <Identity Id="CsxTemplate.b72cbc8e-c7af-4966-95e6-13d4becb89dd" Version="0.0.2" Language="en-US" Publisher="Johannes Egger" />
     <DisplayName>CsxTemplate</DisplayName>
     <Description xml:space="preserve">Template-engine that uses C# scripts to generate .cs files.</Description>
     <Tags>template, csx, roslyn, script</Tags>
