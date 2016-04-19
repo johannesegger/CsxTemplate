@@ -17,7 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-var powers = Enumerable.Range(0, 5);
+var powers = Enumerable.Range(10, 5);
 
 $@"// Generation time: {DateTime.Now}
 
@@ -29,11 +29,7 @@ namespace {Namespace}
             string.Join
             (
                 Environment.NewLine,
-                powers.Select(i =>
-                    $@"public static double TwoToThePowerOf{i}() {{
-                        return {Math.Pow(2, i)};
-                    }}"
-                )
+                powers.Select(i => $@"public static double TwoToThePowerOf{i} => {Math.Pow(2, i)};")
             )
         }
     }}
@@ -41,32 +37,17 @@ namespace {Namespace}
 ```
 ### Result (formatted - to not hurt your eyes)
 ```
-// Generation time: 4/18/2016 9:38:09 PM
+// Generation time: 4/19/2016 6:44:36 AM
 
-namespace MathLib
+namespace FixNuGetHintPathTestProject
 {
     public static class QuickMath
     {
-        public static double TwoToThePowerOf0()
-        {
-            return 1;
-        }
-        public static double TwoToThePowerOf1()
-        {
-            return 2;
-        }
-        public static double TwoToThePowerOf2()
-        {
-            return 4;
-        }
-        public static double TwoToThePowerOf3()
-        {
-            return 8;
-        }
-        public static double TwoToThePowerOf4()
-        {
-            return 16;
-        }
+        public static double TwoToThePowerOf10 => 1024;
+        public static double TwoToThePowerOf11 => 2048;
+        public static double TwoToThePowerOf12 => 4096;
+        public static double TwoToThePowerOf13 => 8192;
+        public static double TwoToThePowerOf14 => 16384;
     }
 }
 ```
